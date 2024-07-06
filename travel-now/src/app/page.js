@@ -3,7 +3,8 @@ import { Fragment, useEffect, useState } from 'react';
 import Container from '@/structure/Container';
 import SearchForm from '@/SearchForm';
 import FlightResults from '@/FlightResults';
-// import Notifications from '@/Notifications';
+import NoResults from '@/NoResults';
+import Sidebar from '@/structure/Sidebar';
 
 import { getTodaysDate } from './utils/helpers';
 import { ENDPOINT } from './store/endpoints';
@@ -11,19 +12,11 @@ import { ACCESS_TOKEN } from './store/keys';
 import { SEARCHED_DATA } from './data';
 
 export default function Home() {
-	// const dispatch = useDispatch();
-	//const flights = useSelector((state) => state.flight.flights);
-	// const notification = useSelector((state) => state.ui.notification);
 	const [searchData, setSearchData] = useState();
 	const [fetchedData, setFetchedData] = useState();
 	const [isFetching, setIsFetching] = useState(false);
 
-	// const { error, fetchedData, isFetching, setFetchedData } = useFetch(
-
-	// );
-
 	useEffect(() => {
-		// dispatch(fetchFlights());
 		if (searchData) {
 			const options = {
 				method: 'GET',
@@ -42,11 +35,13 @@ export default function Home() {
 						searchData.return && searchData.return
 					}&adults=${
 						searchData.travelers
-					}&travelClass=ECONOMY&nonStop=false&currencyCode=CAD&max=250`,
+					}&travelClass=ECONOMY&nonStop=${
+						searchData.nonstop === 'on' ? 'true' : 'false'
+					}&currencyCode=CAD&max=250`,
 					options
 				);
 				const resData = await response.json();
-				setIsFetching(false);
+
 				if (!response.ok) {
 					throw new Error('Failed to fetch data');
 				}
@@ -71,26 +66,30 @@ export default function Home() {
 			<section className='min-h-[100vh]'>
 				<Container>
 					<h1 className='font-medium text-xl pb-4'>
-						Booking on{' '}
+						Flights available on{' '}
 						<span className='font-bold'>{getTodaysDate()}</span>
 					</h1>
 
 					<SearchForm searchFn={searchHandler} />
+
 					{isFetching && (
 						<p className='text-teal-700 pt-6'>
 							...Flight info is loading
 						</p>
 					)}
-					{fetchedData && <FlightResults data={fetchedData} />}
+
+					{fetchedData && (
+						<>
+							<Sidebar />
+							<FlightResults data={fetchedData} />
+						</>
+					)}
+
+					{fetchedData && fetchedData.data.length < 1 && (
+						<NoResults />
+					)}
 				</Container>
 			</section>
-
-			{/* {notification && (
-				<Notifications
-					status={notification.status}
-					message={notification.message}
-				/>
-			)} */}
 		</Fragment>
 	);
 }

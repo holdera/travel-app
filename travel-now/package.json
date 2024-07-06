@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "clean": "rimraf .next",
     "start": "next start",
     "lint": "next lint"
   },
@@ -13,12 +14,14 @@
     "next": "14.2.4",
     "react": "^18",
     "react-dom": "^18",
+    "react-hook-form": "^7.52.1",
     "react-redux": "^9.1.2"
   },
   "devDependencies": {
     "eslint": "^8",
     "eslint-config-next": "14.2.4",
     "postcss": "^8",
+    "rimraf": "^5.0.8",
     "tailwindcss": "^3.4.1"
   }
 }
