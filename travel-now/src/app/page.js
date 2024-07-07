@@ -81,10 +81,10 @@ export default function Home() {
 					)}
 
 					{fetchedData && (
-						<>
-							<Sidebar />
+						<div className='md:flex md:justify-between'>
+							<Sidebar airlines={fetchedData.data} />
 							<FlightResults data={fetchedData} />
-						</>
+						</div>
 					)}
 
 					{fetchedData && fetchedData.data.length < 1 && (

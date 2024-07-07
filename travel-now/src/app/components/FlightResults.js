@@ -3,13 +3,12 @@ import FlightPricing from '@/FlightPricing';
 import { formatTravelTime } from './../utils/helpers';
 
 export default function FlightResults({ data }) {
-	console.log(data);
 	const flightData = data.data;
 	const dictionaries = data.dictionaries;
 
 	return (
 		<>
-			<div className='py-5 md:py-8'>
+			<div className='py-5 md:py-8 md:w-2/3'>
 				<h2 className='font-semibold text-lg mb-2.5'>
 					Search Results ({data.meta.count})
 				</h2>
