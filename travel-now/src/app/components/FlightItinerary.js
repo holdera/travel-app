@@ -48,11 +48,17 @@ export default function FlightItinerary({ data, segments }) {
 					{i === 0 && (
 						<Button onClick={optionsHandler}>
 							<span className='flex items-center justify-center'>
-								More Flight Options
+								{showOptions ? 'Less' : 'More'} Flight Options
 								<Image
-									className='ml-2 transition-transform group-hover:rotate-180'
+									className={`ml-2 transition-transform group-hover:rotate-180 ${
+										showOptions ? 'rotate-180' : ''
+									}`}
 									src={downArrow}
-									alt='click for more options'
+									alt={`${
+										showOptions
+											? 'click for less options'
+											: 'click for more options'
+									}`}
 								/>
 							</span>
 						</Button>

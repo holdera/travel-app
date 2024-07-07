@@ -13,7 +13,7 @@ import { SEARCHED_DATA } from './data';
 
 export default function Home() {
 	const [searchData, setSearchData] = useState();
-	const [fetchedData, setFetchedData] = useState();
+	const [fetchedData, setFetchedData] = useState(false);
 	const [isFetching, setIsFetching] = useState(false);
 
 	useEffect(() => {
@@ -31,13 +31,15 @@ export default function Home() {
 				const response = await fetch(
 					`${ENDPOINT}?originLocationCode=${searchData.from.toUpperCase()}&destinationLocationCode=${searchData.to.toUpperCase()}&departureDate=${
 						searchData.depart
-					}${searchData.return && '&returnDate='}${
-						searchData.return && searchData.return
+					}${
+						searchData.return
+							? `&returnDate=${searchData.return}`
+							: ''
 					}&adults=${
 						searchData.travelers
 					}&travelClass=ECONOMY&nonStop=${
 						searchData.nonstop === 'on' ? 'true' : 'false'
-					}&currencyCode=CAD&max=250`,
+					}&currencyCode=CAD&max=100`,
 					options
 				);
 				const resData = await response.json();

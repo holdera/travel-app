@@ -13,34 +13,26 @@ export default function FlightResults({ data }) {
 				<h2 className='font-semibold text-lg mb-2.5'>
 					Search Results ({data.meta.count})
 				</h2>
-				{flightData.map((item, i) => {
-					if (i < 100) {
-						return (
-							<div
-								key={`flight-item-${Math.random()}`}
-								className='border border-teal-500 mb-3 px-4 py-6 rounded-md'
-							>
-								{item.itineraries.map((itinerary) => (
-									<>
-										<p>
-											{formatTravelTime(
-												itinerary.duration
-											)}
-										</p>
-										<FlightItinerary
-											data={dictionaries.carriers}
-											segments={itinerary.segments}
-										/>
-									</>
-								))}
-
-								<FlightPricing
-									travelerPricingData={item.travelerPricings}
+				{flightData.map((item) => (
+					<div
+						key={`flight-item-${Math.random()}`}
+						className='border border-teal-500 mb-3 px-4 py-6 rounded-md'
+					>
+						{item.itineraries.map((itinerary) => (
+							<>
+								<p>{formatTravelTime(itinerary.duration)}</p>
+								<FlightItinerary
+									data={dictionaries.carriers}
+									segments={itinerary.segments}
 								/>
-							</div>
-						);
-					}
-				})}
+							</>
+						))}
+
+						<FlightPricing
+							travelerPricingData={item.travelerPricings}
+						/>
+					</div>
+				))}
 			</div>
 		</>
 	);
