@@ -13,7 +13,7 @@ import { SEARCHED_DATA } from './data';
 
 export default function Home() {
 	const [searchData, setSearchData] = useState();
-	const [fetchedData, setFetchedData] = useState(false);
+	const [fetchedData, setFetchedData] = useState(SEARCHED_DATA);
 	const [isFetching, setIsFetching] = useState(false);
 
 	useEffect(() => {

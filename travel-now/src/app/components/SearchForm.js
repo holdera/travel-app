@@ -20,7 +20,12 @@ export default function SearchForm({ searchFn }) {
 		searchFn(e);
 	}
 	return (
-		<form id='search_form' onSubmit={formHandler} noValidate>
+		<form
+			id='search_form'
+			className='mb-8'
+			onSubmit={formHandler}
+			noValidate
+		>
 			<fieldset className='flex justify-between max-w-[220px]'>
 				<legend className='absolute h-0 invisible  w-0 text-[0rem]'>
 					Types of Flights
