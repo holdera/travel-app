@@ -5,7 +5,7 @@ import RangeSlider from '@/ui/RangeSlider';
 
 import { minutesToTime, timeToMinutes } from '../../utils/helpers';
 
-export default function Sidebar({ airlines }) {
+export default function Sidebar({ airlines, dictionaries }) {
 	const [filterOpen, setFilterOpen] = useState(false);
 	const [departTime, setDepartTime] = useState(timeToMinutes('12:00'));
 	const [returnTime, setReturnTime] = useState(timeToMinutes('12:00'));
@@ -29,6 +29,14 @@ export default function Sidebar({ airlines }) {
 	function returnTimeHandler(e) {
 		setReturnTime(e.target.value);
 	}
+
+	const uniqueAirlineCodes = [
+		...new Set(airlines.flatMap((flight) => flight.validatingAirlineCodes)),
+	];
+
+	const dic = dictionaries.carriers;
+
+	console.log(dic);
 
 	const h2Style = 'text-lg font-semibold pb-2';
 	const sectionStyle = 'border-t border-teal-900 py-4';
@@ -116,16 +124,15 @@ export default function Sidebar({ airlines }) {
 					<div id='airlines' className={sectionStyle}>
 						<h2 className={h2Style}>Airlines</h2>
 
-						{airlines &&
-							airlines.map((flight) => (
-								<Input
-									key={`airline-${Math.random()}`}
-									type='checkbox'
-									label={flight.validatingAirlineCodes.toString()}
-									id={flight.validatingAirlineCodes.toString()}
-									name={flight.validatingAirlineCodes.toString()}
-								/>
-							))}
+						{uniqueAirlineCodes.sort().map((carrierCode) => (
+							<Input
+								key={`airline-${carrierCode}`}
+								type='checkbox'
+								label={dic[carrierCode]}
+								id={carrierCode}
+								name={carrierCode}
+							/>
+						))}
 					</div>
 				</div>
 			</aside>

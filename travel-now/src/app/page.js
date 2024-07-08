@@ -43,6 +43,7 @@ export default function Home() {
 					}&currencyCode=CAD&max=100`,
 					options
 				);
+
 				const resData = await response.json();
 
 				if (!response.ok) {
@@ -64,6 +65,10 @@ export default function Home() {
 		setSearchData(formData);
 	}
 
+	if (fetchedData) {
+		console.log(fetchedData.dictionaries);
+	}
+
 	return (
 		<Fragment>
 			<section className='min-h-[100vh]'>
@@ -79,7 +84,10 @@ export default function Home() {
 
 					{fetchedData && (
 						<div className='md:flex md:justify-between'>
-							<Sidebar airlines={fetchedData.data} />
+							<Sidebar
+								airlines={fetchedData.data}
+								dictionaries={fetchedData.dictionaries}
+							/>
 							<FlightResults data={fetchedData} />
 						</div>
 					)}
