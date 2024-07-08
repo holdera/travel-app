@@ -18,47 +18,6 @@ export default function Home() {
 	const isFetching = useSelector((state) => state.ui.isFetching);
 	const fetchedData = useSelector((state) => state.flight.flights);
 
-	// useEffect(() => {
-	// 	if (searchData) {
-	// 		const options = {
-	// 			method: 'GET',
-	// 			headers: {
-	// 				'Content-Type': 'application/json',
-	// 				Authorization: 'Bearer ' + ACCESS_TOKEN,
-	// 			},
-	// 		};
-
-	// 		async function fetchSearchData() {
-	// 			setIsFetching(true);
-	// 			const response = await fetch(
-	// 				`${ENDPOINT}?originLocationCode=${searchData.from.toUpperCase()}&destinationLocationCode=${searchData.to.toUpperCase()}&departureDate=${
-	// 					searchData.depart
-	// 				}${
-	// 					searchData.return
-	// 						? `&returnDate=${searchData.return}`
-	// 						: ''
-	// 				}&adults=${
-	// 					searchData.travelers
-	// 				}&travelClass=ECONOMY&nonStop=${
-	// 					searchData.nonstop === 'on' ? 'true' : 'false'
-	// 				}&currencyCode=CAD&max=100`,
-	// 				options
-	// 			);
-
-	// 			const resData = await response.json();
-
-	// 			if (!response.ok) {
-	// 				throw new Error('Failed to fetch data');
-	// 			}
-	// 			setIsFetching(false);
-	// 			setFetchedData(resData);
-
-	// 			return resData;
-	// 		}
-	// 		fetchSearchData();
-	// 	}
-	// }, [searchData]);
-
 	useEffect(() => {
 		if (searchData) {
 			dispatch(fetchFlightData(searchData));
@@ -69,8 +28,6 @@ export default function Home() {
 		e.preventDefault();
 		dispatch(getSearchValues(e));
 	}
-
-	console.log(searchData);
 
 	return (
 		<Fragment>
