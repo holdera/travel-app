@@ -119,6 +119,7 @@ export default function Sidebar({ airlines }) {
 						{airlines &&
 							airlines.map((flight) => (
 								<Input
+									key={`airline-${Math.random()}`}
 									type='checkbox'
 									label={flight.validatingAirlineCodes.toString()}
 									id={flight.validatingAirlineCodes.toString()}

@@ -5,6 +5,7 @@ import SearchForm from '@/SearchForm';
 import FlightResults from '@/FlightResults';
 import NoResults from '@/NoResults';
 import Sidebar from '@/structure/Sidebar';
+import Loader from '@/ui/Loader';
 
 import { getTodaysDate } from './utils/helpers';
 import { ENDPOINT } from './store/endpoints';
@@ -13,7 +14,7 @@ import { SEARCHED_DATA } from './data';
 
 export default function Home() {
 	const [searchData, setSearchData] = useState();
-	const [fetchedData, setFetchedData] = useState(SEARCHED_DATA);
+	const [fetchedData, setFetchedData] = useState();
 	const [isFetching, setIsFetching] = useState(false);
 
 	useEffect(() => {
@@ -47,14 +48,14 @@ export default function Home() {
 				if (!response.ok) {
 					throw new Error('Failed to fetch data');
 				}
-
+				setIsFetching(false);
 				setFetchedData(resData);
+
 				return resData;
 			}
 			fetchSearchData();
-			setIsFetching(false);
 		}
-	}, [fetchedData, searchData]);
+	}, [searchData]);
 
 	function searchHandler(e) {
 		const form = new FormData(e.target);
@@ -74,11 +75,7 @@ export default function Home() {
 
 					<SearchForm searchFn={searchHandler} />
 
-					{isFetching && (
-						<p className='text-teal-700 pt-6'>
-							...Flight info is loading
-						</p>
-					)}
+					{isFetching && <Loader />}
 
 					{fetchedData && (
 						<div className='md:flex md:justify-between'>
