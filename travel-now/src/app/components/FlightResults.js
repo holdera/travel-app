@@ -14,7 +14,7 @@ export default function FlightResults({ data }) {
 				</h2>
 				{flightData.map((item) => (
 					<div
-						key={`flight-item-${Math.random()}`}
+						key={`${item.id}`}
 						className='border border-teal-500 mb-3 px-4 py-6 rounded-md'
 					>
 						{item.itineraries.map((itinerary) => (

@@ -36,8 +36,6 @@ export default function Sidebar({ airlines, dictionaries }) {
 
 	const dic = dictionaries.carriers;
 
-	console.log(dic);
-
 	const h2Style = 'text-lg font-semibold pb-2';
 	const sectionStyle = 'border-t border-teal-900 py-4';
 	return (

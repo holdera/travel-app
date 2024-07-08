@@ -1,39 +1,49 @@
 import { flightActions } from './flight-slice';
 import { uiActions } from './ui-slice';
-
-const coords = {
-	lat: 43.86247,
-	lng: -79.02894,
-};
-const mainUrl = `https://sky-scrapper.p.rapidapi.com/api/v1/flights/getNearByAirports?lat=${coords.lat}&lng=${coords.lng}&locale=en-US`;
+import { ACCESS_TOKEN } from './keys';
+import { ENDPOINT } from './endpoints';
 
 const options = {
 	method: 'GET',
 	headers: {
-		'x-rapidapi-key': '6e9beb027dmsh7ff618a0bf8182ap19c29ejsnd192af037ccb',
-		'x-rapidapi-host': 'sky-scrapper.p.rapidapi.com',
+		'Content-Type': 'application/json',
+		Authorization: 'Bearer ' + ACCESS_TOKEN,
 	},
 };
 
-export const fetchFlights = () => {
-	return async (dispatch) => {
-		dispatch(
-			uiActions.pushNotifications({
-				status: 'pending',
-				message: 'Flights are coming up!',
-			})
-		);
+export const getSearchValues = (e) => {
+	return (dispatch) => {
+		const form = new FormData(e.target);
+		const formData = Object.fromEntries(form.entries());
+		console.log(formData);
+		dispatch(flightActions.getSearchInput(formData));
+	};
+};
 
+export const fetchFlightData = (searchData) => {
+	return async (dispatch) => {
 		const fetchData = async () => {
-			const response = await fetch(mainUrl, options);
+			dispatch(uiActions.checkIfDataIsFetching(true));
+			const response = await fetch(
+				`${ENDPOINT}?originLocationCode=${searchData.from.toUpperCase()}&destinationLocationCode=${searchData.to.toUpperCase()}&departureDate=${
+					searchData.depart
+				}${
+					searchData.return ? `&returnDate=${searchData.return}` : ''
+				}&adults=${searchData.travelers}&travelClass=ECONOMY&nonStop=${
+					searchData.nonstop === 'on' ? 'true' : 'false'
+				}&currencyCode=CAD&max=100`,
+				options
+			);
+
+			dispatch(uiActions.checkIfDataIsFetching(false));
+
 			if (!response.ok) {
 				throw new Error('Failed to get Data');
 			}
 
-			const result = await response.json();
-			return result;
+			const resData = await response.json();
+			return resData;
 		};
-
 		try {
 			const flightData = await fetchData();
 			console.log(flightData);
@@ -42,7 +52,7 @@ export const fetchFlights = () => {
 			dispatch(
 				uiActions.pushNotifications({
 					status: 'error',
-					message: 'Cannot login. Please try again later.',
+					message: 'Cannot fetch data. Please try again later.',
 				})
 			);
 		}

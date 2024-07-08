@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const uiSlice = createSlice({
 	name: 'ui',
-	initialState: { showLogin: false, notification: null },
+	initialState: { showLogin: false, notification: null, isFetching: false },
 	reducers: {
 		toggle(state) {
 			state.showLogin = !state.showLogin;
@@ -12,6 +12,9 @@ const uiSlice = createSlice({
 				status: action.payload.status,
 				message: action.payload.message,
 			};
+		},
+		checkIfDataIsFetching(state) {
+			state.isFetching = !state.isFetching;
 		},
 	},
 });

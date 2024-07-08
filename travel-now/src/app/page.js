@@ -1,5 +1,6 @@
 'use client';
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Container from '@/structure/Container';
 import SearchForm from '@/SearchForm';
 import FlightResults from '@/FlightResults';
@@ -7,67 +8,69 @@ import NoResults from '@/NoResults';
 import Sidebar from '@/structure/Sidebar';
 import Loader from '@/ui/Loader';
 
+import { getSearchValues, fetchFlightData } from './store/flight-actions';
+
 import { getTodaysDate } from './utils/helpers';
-import { ENDPOINT } from './store/endpoints';
-import { ACCESS_TOKEN } from './store/keys';
-import { SEARCHED_DATA } from './data';
 
 export default function Home() {
-	const [searchData, setSearchData] = useState();
-	const [fetchedData, setFetchedData] = useState();
-	const [isFetching, setIsFetching] = useState(false);
+	const dispatch = useDispatch();
+	const searchData = useSelector((state) => state.flight.searchData);
+	const isFetching = useSelector((state) => state.ui.isFetching);
+	const fetchedData = useSelector((state) => state.flight.flights);
+
+	// useEffect(() => {
+	// 	if (searchData) {
+	// 		const options = {
+	// 			method: 'GET',
+	// 			headers: {
+	// 				'Content-Type': 'application/json',
+	// 				Authorization: 'Bearer ' + ACCESS_TOKEN,
+	// 			},
+	// 		};
+
+	// 		async function fetchSearchData() {
+	// 			setIsFetching(true);
+	// 			const response = await fetch(
+	// 				`${ENDPOINT}?originLocationCode=${searchData.from.toUpperCase()}&destinationLocationCode=${searchData.to.toUpperCase()}&departureDate=${
+	// 					searchData.depart
+	// 				}${
+	// 					searchData.return
+	// 						? `&returnDate=${searchData.return}`
+	// 						: ''
+	// 				}&adults=${
+	// 					searchData.travelers
+	// 				}&travelClass=ECONOMY&nonStop=${
+	// 					searchData.nonstop === 'on' ? 'true' : 'false'
+	// 				}&currencyCode=CAD&max=100`,
+	// 				options
+	// 			);
+
+	// 			const resData = await response.json();
+
+	// 			if (!response.ok) {
+	// 				throw new Error('Failed to fetch data');
+	// 			}
+	// 			setIsFetching(false);
+	// 			setFetchedData(resData);
+
+	// 			return resData;
+	// 		}
+	// 		fetchSearchData();
+	// 	}
+	// }, [searchData]);
 
 	useEffect(() => {
 		if (searchData) {
-			const options = {
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/json',
-					Authorization: 'Bearer ' + ACCESS_TOKEN,
-				},
-			};
-
-			async function fetchSearchData() {
-				setIsFetching(true);
-				const response = await fetch(
-					`${ENDPOINT}?originLocationCode=${searchData.from.toUpperCase()}&destinationLocationCode=${searchData.to.toUpperCase()}&departureDate=${
-						searchData.depart
-					}${
-						searchData.return
-							? `&returnDate=${searchData.return}`
-							: ''
-					}&adults=${
-						searchData.travelers
-					}&travelClass=ECONOMY&nonStop=${
-						searchData.nonstop === 'on' ? 'true' : 'false'
-					}&currencyCode=CAD&max=100`,
-					options
-				);
-
-				const resData = await response.json();
-
-				if (!response.ok) {
-					throw new Error('Failed to fetch data');
-				}
-				setIsFetching(false);
-				setFetchedData(resData);
-
-				return resData;
-			}
-			fetchSearchData();
+			dispatch(fetchFlightData(searchData));
 		}
-	}, [searchData]);
+	}, [searchData, dispatch]);
 
 	function searchHandler(e) {
-		const form = new FormData(e.target);
-		const formData = Object.fromEntries(form.entries());
-		console.log(formData);
-		setSearchData(formData);
+		e.preventDefault();
+		dispatch(getSearchValues(e));
 	}
 
-	if (fetchedData) {
-		console.log(fetchedData.dictionaries);
-	}
+	console.log(searchData);
 
 	return (
 		<Fragment>

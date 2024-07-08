@@ -2,10 +2,13 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const flightSlice = createSlice({
 	name: 'flight',
-	initialState: { flights: [] },
+	initialState: { searchData: null, flights: null },
 	reducers: {
+		getSearchInput(state, action) {
+			state.searchData = action.payload;
+		},
 		getFlights(state, action) {
-			state.flights = action.payload.flights;
+			state.flights = action.payload;
 		},
 	},
 });
